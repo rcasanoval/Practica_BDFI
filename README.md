@@ -82,3 +82,14 @@ Al ejecutar este comando nos debemos de dirigir a la página web donde está cor
 - <IP_MV>: Este valor se debe de sustituir por la dirección IP de la máquina virtual. En nuestro caso quedaría de la siguiente forma: http://20.229.194.248:5000/flights/delays/predict_kafka
 
 En la página web se deben de realizar las pruebas para confirmar que recibimos la predicción con los datos introducidos.
+
+## Configuración Virtual Machine en Azure
+
+Se ha configurado en Azure una Máquina Virtual, como se observa en la siguiente imagen: 
+
+<img src="Maquina Virtual Azure.jpg">
+
+En Azure se debe de crear una regla que permita el tráfico al puerto 5000, como se observa a continuación:
+
+<img src="Rules Airflows.jpeg">
+
