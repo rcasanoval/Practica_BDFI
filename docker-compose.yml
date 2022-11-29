@@ -1,0 +1,106 @@
+version: '3'
+services:  
+  scala:
+     build:
+             context: .
+             dockerfile: Dockerfile.scala
+     container_name: scala
+     hostname: scala
+     restart: always
+     volumes:
+       - scala_data:/home/practica_big_data_2019
+
+  spark:
+    build: .
+    container_name: spark
+    hostname: spark
+    user: root
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '8080:8080'
+    depends_on: 
+      - scala
+    working_dir: /home/practica_big_data_2019/
+    #command: spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 --class es.upm.dit.ging.predictor.MakePrediction target/scala-2.12/flight_prediction_2.12-0.1.jar
+    volumes:
+            - scala_data:/home/practica_big_data_2019
+    networks:
+            - default
+
+  zookeeper:
+    image: 'bitnami/zookeeper:3.7.1'
+    container_name: zookeeper
+    hostname: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+            ZOOKEEPER_SYNC_LIMIT: 2
+            ALLOW_ANONYMOUS_LOGIN: 'yes'
+    networks:
+      - default
+
+  kafka:
+    image: 'bitnami/kafka:3.1.2'
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - '9092:9092'
+    expose:
+            - "9093"
+    depends_on:
+            - zookeeper
+    working_dir: /opt/bitnami/kafka
+    environment:
+            - KAFKA_BROKER_ID=1
+            - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+            - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+            - ALLOW_PLAINTEXT_LISTENER=yes
+    networks:
+      - default
+
+  mongo:
+        image: mongo:latest
+        container_name: mongo
+        hostname: mongo
+        ports:
+                - 27017:27017
+        volumes: 
+          - scala_data:/home/practica_big_data_2019
+        working_dir: /home/practica_big_data_2019
+        networks:
+          - default
+
+  python:
+        build: 
+          context: .
+          dockerfile: Dockerfile.python
+        container_name: python
+        hostname: python
+        environment:
+                FLASK_DEBUG: 1
+                FLASK_APP: ./predict_flask.py
+                FLASK_RUN_HOST: 0.0.0.0
+                TEMPLASTES_AUTO_RELOAD: 'True'
+                PROJECT_HOME: /home/practica_big_data_2019
+        command: python3 predict_flask.py
+        ports:
+            - '5000:5000'
+        links:
+          - mongo
+        depends_on: 
+          - mongo
+        volumes:
+          - scala_data:/home/practica_big_data_2019
+        networks:
+          - default
+
+volumes:
+        scala_data:
