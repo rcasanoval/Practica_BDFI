@@ -25,7 +25,12 @@ docker-compose --version
 ```
 NOTA: Si no está instalado se recomienda seguir la instalación en el siguiente enlace: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04
 
-Los servicios se construyen ejecutando el siguiente comando: 
+Para la realización de la práctica se han construido 3 ficheros Dockerfiles, lo que nos permite personalizar las imágenes a utilizar.
+- **Dockerfile**: Imagen creada para spark, con esta imagen se descargan las librerías y los datos. 
+- **Dockerfile.scala**: Imagen creada para scala-sbt, con esta imagen se descargan las librerías y los datos. 
+- **Dockerfile.python**: Imagen creada para la web, con esta imagen se descargan las librerías y se expone el puerto 5000.
+
+Los servicios personalizados se construyen ejecutando el siguiente comando: 
 
 ```
 docker-compose build
