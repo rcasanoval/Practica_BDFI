@@ -79,7 +79,7 @@ Una vez el modelo entrenado y guardado, se procederá a poner en marcha el predi
 docker-compose exec spark bash -c "cd flight_prediction && spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.12:3.0.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 --class es.upm.dit.ging.predictor.MakePrediction target/scala-2.12/flight_prediction_2.12-0.1.jar" &
 ```
 Al ejecutar este comando nos debemos de dirigir a la página web donde está corriendo la aplicación: http://<IP_MV>:5000/flights/delays/predict_kafka
-- <IP_MV>: Este valor se debe de sustituir por la dirección IP de la máquina virtual. En nuestro caso quedaría de la siguiente forma: http://20.229.194.248:5000/flights/delays/predict_kafka
+- <IP_MV>: Este valor se debe de sustituir por la dirección IP de la máquina virtual. En nuestro caso quedaría de la siguiente forma: http://20.0.194.80:5000/flights/delays/predict_kafka
 
 En la página web se deben de realizar las pruebas para confirmar que recibimos la predicción con los datos introducidos.
 
