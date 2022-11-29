@@ -6,6 +6,8 @@ services:
              dockerfile: Dockerfile.scala
      container_name: scala
      hostname: scala
+     ports:
+       - '8081:8081'
      restart: always
      volumes:
        - scala_data:/home/practica_big_data_2019
@@ -22,7 +24,7 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
     ports:
-      - '8080:8080'
+      - '8000:8000'
     depends_on: 
       - scala
     working_dir: /home/practica_big_data_2019/
@@ -71,7 +73,7 @@ services:
         container_name: mongo
         hostname: mongo
         ports:
-                - 27017:27017
+                - '27017:27017'
         volumes: 
           - scala_data:/home/practica_big_data_2019
         working_dir: /home/practica_big_data_2019
