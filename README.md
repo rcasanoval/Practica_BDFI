@@ -93,3 +93,14 @@ En Azure se debe de crear una regla que permita el tráfico al puerto 5000, como
 
 <img src="Rules Airflows.jpeg">
 
+## Airflow
+
+Este apartado se ha intentado realizar, hemos creado las carpetas solicitada, se ha movidado el fichero setuup.py a la carpeta dags y se ha utilizado el siguiente comando: 
+
+```
+sudo airflow dags backfill --start-date 2022-11-29 --end-date 2022-12-29 dags/setup.py
+```
+
+Sin embargo veíamos este error en la página: 
+
+<img src="Airflow.png">
